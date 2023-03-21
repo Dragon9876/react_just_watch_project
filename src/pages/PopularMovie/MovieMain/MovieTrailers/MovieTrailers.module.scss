@@ -1,0 +1,15 @@
+.movie__trailers_wrapper {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   column-gap: 20px;
+   row-gap: 20px;
+}
+
+.movie__trailers_title {
+   font-size: 16px;
+   color: #6a7c8f;
+   font-weight: 900;
+   text-transform: uppercase;
+   margin-top: 18px;
+   margin-bottom: 8px;
+}

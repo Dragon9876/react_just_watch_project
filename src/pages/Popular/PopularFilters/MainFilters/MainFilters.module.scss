@@ -1,0 +1,13 @@
+.main__filters_wrapper {
+   display: flex;
+   column-gap: 20px;
+}
+
+.main__filters_button {
+   white-space: nowrap;
+   font-size: 20px;
+   font-weight: 900;
+   color: #8c8c8c;
+   transition: color 0.1s ease-in-out;
+   transition-delay: 0.2s;
+}

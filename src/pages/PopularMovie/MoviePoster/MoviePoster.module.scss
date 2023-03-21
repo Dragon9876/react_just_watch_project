@@ -1,0 +1,9 @@
+.movie__poster {
+   position: relative;
+
+   &_image {
+      width: 100%;
+      object-fit: cover;
+      border-radius: 5px 5px 0 0;
+   }
+}

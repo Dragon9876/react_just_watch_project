@@ -1,0 +1,58 @@
+.movie__main {
+   display: flex;
+   flex-direction: column;
+
+   &_header {
+      display: flex;
+      align-items: center;
+   }
+
+   &_description {
+      margin-top: 30px;
+   }
+
+   &_title {
+      color: #6a7c8f;
+      font-size: 16px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      margin-top: 18px;
+   }
+
+   &_trailers {
+      margin-top: 40px;
+   }
+
+   &_text {
+      font-size: 16px;
+      line-height: 1.5;
+   }
+
+   &_name {
+      color: #ffffff;
+      font-size: 28px;
+   }
+
+   &_year {
+      flex: 1 1 auto;
+      font-size: 20px;
+      color: #b9bdcc;
+      text-shadow: 0 1px 0 #000000;
+      margin-left: 4px;
+   }
+
+   &_share {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      row-gap: 5px;
+      width: 24px;
+      font-size: 12px;
+      color: #4c5a67;
+   }
+
+   &_cast {
+      display: grid;
+   }
+}
