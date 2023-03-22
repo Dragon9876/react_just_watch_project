@@ -46,6 +46,11 @@ export const SingIn = () => {
             name='password'
          />
          <button onClick={() => handleSignInWithEmail()}>Sing In</button>
+         <div>
+            Please use this email and password to sing in into my account
+            <div>email: unreal.engine.game212@gmail.com</div>
+            <span>password: 123456</span>
+         </div>
       </div>
    )
 }

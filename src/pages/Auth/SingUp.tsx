@@ -5,6 +5,7 @@ import { useAuth } from '../../providers/AuthProvider/AuthProvider'
 
 export const SingUp = () => {
    const auth = useAuth()
+   const [isSendEmail, setIsSentEmail] = useState(true)
    const [loginInfo, setLoginInfo] = useState({
       email: '',
       password: '',
@@ -17,7 +18,10 @@ export const SingUp = () => {
       })
    }
    const handleSigUpWithEmail = async () => {
-      await auth.singUp({ email: loginInfo.email, password: loginInfo.password })
+      const result = await auth.singUp({ email: loginInfo.email, password: loginInfo.password })
+      if (!result.error) {
+         setIsSentEmail(true)
+      }
    }
    // useEffect(() => {
    //     console.log("loginInfo", loginInfo);
@@ -40,6 +44,7 @@ export const SingUp = () => {
             name='password'
          />
          <button onClick={() => handleSigUpWithEmail()}>Sing Up</button>
+         {isSendEmail && 'Confirmation letter is sent to your email'}
       </div>
    )
 }
