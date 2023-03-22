@@ -4,8 +4,11 @@ import { Typography } from '../../../components'
 import { MovieTrailers } from './MovieTrailers/MovieTrailers'
 import { SimilarMovies } from './SimiralMovies/SimilarMovies'
 
-import { IMovieResult } from '../../../services/types/movies.in'
+import { IMovieDetailsResult, IMovieResult } from '../../../services/types/movies.in'
 
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
+import { MOVIES_API_KEY } from '../../../config'
 import styles from './MovieMain.module.scss'
 
 interface IMovieMain {
@@ -13,6 +16,21 @@ interface IMovieMain {
 }
 
 export const MovieMain: FC<IMovieMain> = ({ movieInfo }) => {
+   const { data: movieDetails } = useQuery({
+      queryKey: ['movie_details', movieInfo.id],
+      enabled: !!movieInfo.id,
+      queryFn: ({ queryKey }): Promise<IMovieDetailsResult> => {
+         return axios
+            .get(`https://api.themoviedb.org/3/movie/${queryKey[1]}`, {
+               params: {
+                  api_key: MOVIES_API_KEY,
+               },
+            })
+            .then((response) => response.data)
+      },
+   })
+
+   console.log('movieDetails ----- ', movieDetails)
    return (
       <div className={styles.movie__main}>
          <div className={styles.movie__main_header}>
@@ -47,17 +65,18 @@ export const MovieMain: FC<IMovieMain> = ({ movieInfo }) => {
                Synopsis
             </Typography>
             <Typography as='p' className={styles.movie__main_text}>
-               A young couple travels to a remote island to eat at an exclusive restaurant where the
-               chef has prepared a lavish menu, with some shocking surprises.
+               {movieInfo.overview}
+               {/* A young couple travels to a remote island to eat at an exclusive restaurant where the */}
+               {/* chef has prepared a lavish menu, with some shocking surprises. */}
             </Typography>
 
             <Typography as='h3' className={styles.movie__main_title}>
-               The menu - Watch Now: Stream,Buy or Rent
+               {movieInfo.title} - Watch Now: Stream,Buy or Rent
             </Typography>
 
             <Typography as='p' className={styles.movie__main_text}>
-               Currently you are able to watch 'The Menu' streaming on Disney Plus or buy it as
-               download on Amazon Video, Google Play Movies, YouTube, Apple TV, Microsoft Store,
+               Currently you are able to watch {movieInfo.title} streaming on Disney Plus or buy it
+               as download on Amazon Video, Google Play Movies, YouTube, Apple TV, Microsoft Store,
                Telstra TV, Fetch TV.
             </Typography>
          </div>
@@ -65,7 +84,7 @@ export const MovieMain: FC<IMovieMain> = ({ movieInfo }) => {
          {/* <div className={styles.movie__main_cast}></div> */}
 
          <MovieTrailers movieID={movieInfo.id} />
-         <SimilarMovies movieID={movieInfo.id} />
+         <SimilarMovies movieID={movieInfo.id} movieTitle={movieInfo.title} />
       </div>
    )
 }

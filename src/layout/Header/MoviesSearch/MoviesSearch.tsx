@@ -1,18 +1,33 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Dropdown, Input } from '../../../components'
 import { useDebounce } from '../../../hooks/useDebounce'
 import { useToggle } from '../../../hooks/useToggle'
-import { useLazySearchMoviesQuery } from '../../../services/api'
 
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
+import { MOVIES_API_KEY } from '../../../config'
+import { IMovies } from '../../../services/types/movies.in'
 import styles from './MoviesSearch.module.scss'
 
 export const MoviesSearch = () => {
-   const [fetch, data] = useLazySearchMoviesQuery()
-
+   // const [fetch, data] = useLazySearchMoviesQuery()
    const [searchTerm, setSearchTerm] = useState('')
+   const debouncedSearchTerm = useDebounce(searchTerm, 500)
+   const { data, isLoading } = useQuery({
+      queryKey: ['search_movies', debouncedSearchTerm],
+      queryFn: (): Promise<IMovies> => {
+         return axios
+            .get('https://api.themoviedb.org/3/search/movie', {
+               params: {
+                  api_key: MOVIES_API_KEY,
+                  query: debouncedSearchTerm,
+               },
+            })
+            .then((response) => response.data)
+      },
+   })
 
    const { setIsToggled, isToggled } = useToggle()
-   const debouncedSearchTerm = useDebounce(searchTerm, 500)
 
    const searchInputRef = useRef(null)
    const dropdownRef = useRef(null)
@@ -21,9 +36,9 @@ export const MoviesSearch = () => {
       setIsToggled((prevValue) => true)
    }
 
-   useEffect(() => {
-      fetch(debouncedSearchTerm)
-   }, [debouncedSearchTerm])
+   // useEffect(() => {
+   //    fetch(debouncedSearchTerm)
+   // }, [debouncedSearchTerm])
 
    return (
       <div className={styles.movie__search_wrapper}>
@@ -42,7 +57,7 @@ export const MoviesSearch = () => {
             <div style={{ backgroundColor: 'white', minHeight: '200px' }}>
                <span>Recent searches</span>
                Clear All
-               {data?.data?.results.map((result) => (
+               {data?.results.map((result) => (
                   <>
                      <div>{result.original_title}</div>
                      <div>{result.release_date}</div>

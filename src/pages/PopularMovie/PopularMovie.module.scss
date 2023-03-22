@@ -1,9 +1,19 @@
 .popular__movie_wrapper {
-   display: grid;
-   grid-template-columns: 1fr minmax(0, 2fr);
-   column-gap: 40px;
-   margin-top: 350px;
-   background-color: #060d17;
-   padding: 25px;
-   border-radius: 16px 16px 0 0;
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 2fr);
+  column-gap: 40px;
+  margin-top: 350px;
+  background-color: #060d17;
+  padding: 25px;
+  border-radius: 16px 16px 0 0;
+
+  @media only screen and (max-width: 900px) {
+    display: block;
+  }
+}
+
+.popular__movie_sidebar {
+  @media only screen and (max-width: 900px) {
+    display: none;
+  }
 }

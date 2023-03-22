@@ -1,32 +1,40 @@
-const genres = [
-   { genreLabel: 'Action & Adventure ', genreValue: 'action_&_adventure' },
-   { genreLabel: 'Comedy', genreValue: 'comedy' },
-   { genreLabel: 'Documentary', genreValue: 'action_&_adventure' },
-   { genreLabel: 'Fantasy', genreValue: 'fantasy' },
-   { genreLabel: 'Horror', genreValue: 'horror' },
-   { genreLabel: 'Music & Musical', genreValue: 'music_&_musical' },
-   { genreLabel: 'Romance', genreValue: 'romance' },
-   { genreLabel: 'Sport', genreValue: 'sport' },
-   { genreLabel: 'Western', genreValue: 'western' },
-   { genreLabel: 'Made in Europe', genreValue: 'made_in_europe' },
-   { genreLabel: 'Animation', genreValue: 'animation' },
-   { genreLabel: 'Crime', genreValue: 'action_&_adventure' },
-   { genreLabel: 'Drama', genreValue: 'action_&_adventure' },
-   { genreLabel: 'History', genreValue: 'history' },
-   { genreLabel: 'Kids & Family', genreValue: 'kids_&_family' },
-   { genreLabel: 'Mystery & Thriller', genreValue: 'kids_&_family' },
-   { genreLabel: 'Science-Fiction', genreValue: 'science_fiction' },
-   { genreLabel: 'War & Military ', genreValue: 'war_&_military' },
-   { genreLabel: 'Reality TV ', genreValue: 'reality_tv' },
-]
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
+import { FC } from 'react'
+import { MOVIES_API_KEY } from '../../../../../config'
+import { useFiltersStore } from '../../../../../store'
 
-export const GenresFilter = () => {
+interface IGenresFilter {
+   onGenreChange: (genreId: string) => void
+}
+
+export const GenresFilter: FC<IGenresFilter> = ({ onGenreChange }) => {
+   const setGenre = useFiltersStore((state) => state.setGenre)
+   const { data, isLoading } = useQuery({
+      queryKey: ['genres'],
+      queryFn: () => {
+         return axios
+            .get('https://api.themoviedb.org/3/genre/movie/list', {
+               params: { api_key: MOVIES_API_KEY },
+            })
+            .then((response) => response.data)
+      },
+   })
+
    return (
       <div>
          GenresFilter
-         {genres.map((genre) => (
-            <div key={genre.genreLabel}>{genre.genreLabel}</div>
-         ))}
+         {!isLoading
+            ? data?.genres.map((genre) => (
+                 <div
+                    style={{ cursor: 'pointer' }}
+                    key={genre.id}
+                    onClick={() => setGenre(genre.id)}
+                 >
+                    {genre.name}
+                 </div>
+              ))
+            : 'Loading........'}
       </div>
    )
 }

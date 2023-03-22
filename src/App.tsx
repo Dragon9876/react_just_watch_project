@@ -1,19 +1,25 @@
 import { RouterProvider } from 'react-router-dom'
 
-import { Provider } from 'react-redux'
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query'
+
+
 import { AuthProvider } from './providers/AuthProvider/AuthProvider'
 import { router } from './router/router'
 
-import { store } from './store/store'
+const queryClient = new QueryClient()
 
 function App() {
    return (
       <div className='App'>
-         <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
             <AuthProvider>
                <RouterProvider router={router} />
             </AuthProvider>
-         </Provider>
+        </QueryClientProvider>
       </div>
    )
 }

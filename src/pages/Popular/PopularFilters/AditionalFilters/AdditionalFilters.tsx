@@ -1,12 +1,12 @@
+import { useInfiniteQuery } from '@tanstack/react-query'
+import axios from 'axios'
 import { useCallback, useState } from 'react'
 import { FaFilter } from 'react-icons/all'
+import { MOVIES_API_KEY } from '../../../../config'
+import { IMovies } from '../../../../services/types/movies.in'
 import { AdditionalFilterItem } from './AdditionalFilterItem'
 import styles from './AdditionalFilters.module.scss'
-import { AgeRatingFilter } from './Filters/AgeRatingFilter'
 import { GenresFilter } from './Filters/GenresFilter'
-import { PriceFilter } from './Filters/PriceFilter'
-import { RatingFilter } from './Filters/RatingFilter'
-import { RealizeDateFilter } from './Filters/RealizeDateFilter'
 
 interface FilterRealizeYearValue {
    thisYear: boolean
@@ -32,61 +32,67 @@ export interface IAdditionalFiltersState {
 }
 
 export const AdditionalFilters = () => {
+   const [selectedGenre, setSelectedGenre] = useState('')
    const [additionalFilters, setAdditionalFilters] = useState<IAdditionalFiltersState[]>(() => [
-      {
-         isExpanded: false,
-         isApplied: false,
-         value: {
-            thisYear: false,
-            lastYear: false,
-         },
-         label: 'Realize Year',
-         filterComponent: <RealizeDateFilter />,
-      },
+      // {
+      //    isExpanded: false,
+      //    isApplied: false,
+      //    value: {
+      //       thisYear: false,
+      //       lastYear: false,
+      //    },
+      //    label: 'Realize Year',
+      //    filterComponent: <RealizeDateFilter />,
+      // },
       {
          isExpanded: false,
          isApplied: false,
          value: '',
          label: 'Genres',
-         filterComponent: <GenresFilter />,
+         filterComponent: (
+            <GenresFilter onGenreChange={(genreValue) => setSelectedGenre(genreValue)} />
+         ),
       },
-      {
-         isExpanded: false,
-         isApplied: false,
-         value: '',
-         label: 'Rating',
-         filterComponent: <RatingFilter />,
-      },
-      {
-         isExpanded: false,
-         isApplied: false,
-         value: '',
-         label: 'Price',
-         filterComponent: <PriceFilter />,
-      },
-      {
-         isExpanded: false,
-         isApplied: false,
-         value: '',
-         label: 'Age rating',
-         filterComponent: <AgeRatingFilter />,
-      },
+      // {
+      //    isExpanded: false,
+      //    isApplied: false,
+      //    value: '',
+      //    label: 'Rating',
+      //    filterComponent: <RatingFilter />,
+      // },
+      // {
+      //    isExpanded: false,
+      //    isApplied: false,
+      //    value: '',
+      //    label: 'Price',
+      //    filterComponent: <PriceFilter />,
+      // },
+      // {
+      //    isExpanded: false,
+      //    isApplied: false,
+      //    value: '',
+      //    label: 'Age rating',
+      //    filterComponent: <AgeRatingFilter />,
+      // },
    ])
 
-   // const filteredMoviesSelector = useMemo(() => {
-   //    return createSelector(
-   //       (res) => res.data,
-   //       (res, userId) => userId,
-   //       (data, userId) => [],
-   //    )
-   // }, [])
-   //
-   // useGetAllPopularMoviesQuery('', {
-   //    selectFromResult: (result) => ({
-   //       ...result,
-   //       filteredPopularMovies: [],
-   //    }),
-   // })
+   useInfiniteQuery({
+      queryKey: ['movie_popular_filters', selectedGenre],
+      queryFn: ({ pageParam, queryKey }): Promise<IMovies> => {
+         console.log('queryKey ----------- ', queryKey)
+         return axios
+            .get('https://api.themoviedb.org/3/discover/movie', {
+               params: {
+                  api_key: MOVIES_API_KEY,
+                  language: 'en-US',
+                  page: pageParam,
+                  with_genres: queryKey[1],
+               },
+            })
+            .then((response) => response.data)
+      },
+      getNextPageParam: (lastPage) => lastPage.page + 1,
+   })
 
    const toggleAdditionalFilters = useCallback((filterLabel: string) => {
       setAdditionalFilters((prevAdditionalFilters) =>

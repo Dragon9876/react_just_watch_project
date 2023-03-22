@@ -1,8 +1,11 @@
 import { FC } from 'react'
 
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
+
 import { Typography, VideoIframe } from '../../../../components'
 
-import { useGetAllMovieTrailersQuery } from '../../../../services/api'
+import { MOVIES_API_KEY } from '../../../../config'
 
 import styles from './MovieTrailers.module.scss'
 
@@ -11,8 +14,19 @@ interface IMovieTrailers {
 }
 
 export const MovieTrailers: FC<IMovieTrailers> = ({ movieID }) => {
-   const { data: movieTrailers } = useGetAllMovieTrailersQuery(movieID, {
-      skip: !movieID,
+   const { data: movieTrailers } = useQuery({
+      queryKey: ['movie_trailers', movieID],
+      enabled: !!movieID,
+      queryFn: ({ queryKey }) => {
+         return axios
+            .get(`https://api.themoviedb.org/3/movie/${queryKey[1]}/videos`, {
+               params: {
+                  api_key: MOVIES_API_KEY,
+                  page: 1,
+               },
+            })
+            .then((response) => response.data)
+      },
    })
 
    return (

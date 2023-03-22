@@ -1,9 +1,8 @@
 import { FC } from 'react'
 
 import { MOVIES_API_IMAGES_PATH } from '../../../config'
-import { PosterActions } from './PosterActions/PosterActions'
-
 import styles from './MoviePoster.module.scss'
+import { PosterActions } from './PosterActions/PosterActions'
 
 interface IMoviePoster {
    posterPath: string | null

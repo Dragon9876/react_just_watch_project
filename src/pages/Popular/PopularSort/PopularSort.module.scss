@@ -1,0 +1,44 @@
+.sort {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+
+  &__title {
+    display: inline-block;
+    color: #b9bdcc;
+    margin-right: 8px;
+  }
+
+  &__main {
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    &-arrow {
+      display: inline-block;
+    }
+
+    &-dropdown {
+      position: absolute;
+      top: 40px;
+      left: 0;
+      background-color: #10161d;
+      padding: 8px 0;
+      border-radius: 10px;
+    }
+
+    &-item {
+      min-width: 200px;
+      padding: 11px 20px 10px 20px;
+      cursor: pointer;
+      color: #b9bdcc;
+      font-size: 16px;
+      transition: 0.5s;
+
+      &:hover {
+        color: #d5d5d5;
+        background-color: #121921;
+      }
+    }
+  }
+}

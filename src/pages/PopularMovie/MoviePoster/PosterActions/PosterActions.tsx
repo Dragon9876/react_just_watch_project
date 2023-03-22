@@ -1,8 +1,11 @@
 import { Button } from '../../../../components'
 
+import { FC } from 'react'
 import styles from './PosterActions.module.scss'
 
-export const PosterActions = () => {
+interface IPosterActions {}
+
+export const PosterActions: FC<IPosterActions> = ({}) => {
    return (
       <>
          <div className={styles.poster__actions}>

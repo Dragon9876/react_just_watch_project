@@ -16,7 +16,7 @@ export const Dropdown = forwardRef<Ref, IDropdown>(
          <motion.div
             initial='closed'
             ref={ref}
-            style={style}
+            style={{ ...style }}
             className={className}
             animate={isExpended ? 'opened' : 'closed'}
             variants={{
@@ -29,7 +29,7 @@ export const Dropdown = forwardRef<Ref, IDropdown>(
                   },
                },
                closed: {
-                  opacity: 0.8,
+                  opacity: 1,
                   scale: 0,
                },
             }}
@@ -39,3 +39,5 @@ export const Dropdown = forwardRef<Ref, IDropdown>(
       )
    },
 )
+
+Dropdown.displayName = 'Dropdown'

@@ -24,9 +24,10 @@ export const Header: FC = () => {
                src='https://www.justwatch.com/appassets/img/logo/JustWatch-logo-large.png'
                alt='logo'
                size={{
-                  width: '131px',
+                  width: '40px',
                   height: '20px',
                }}
+               className={styles.header__logo}
             />
 
             <Nav />

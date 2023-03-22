@@ -1,7 +1,6 @@
 import { FC } from 'react'
 
 import { usePagination } from '../../../hooks/usePagination'
-import { useGetAllPopularMoviesQuery } from '../../../services/api'
 import { IMovies } from '../../../services/types/movies.in'
 
 interface IPagination {
@@ -14,8 +13,6 @@ export const Pagination: FC<IPagination> = ({ data }) => {
          data,
          itemsPerPage: 10,
       })
-
-   useGetAllPopularMoviesQuery(activePage)
 
    // useEffect(() => {
    //    console.log('filledArrayWithPageNumbers ------ ', filledArrayWithPageNumbers)

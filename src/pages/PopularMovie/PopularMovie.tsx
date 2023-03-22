@@ -15,9 +15,9 @@ export const PopularMovie: FC = () => {
       <>
          <MovieTrailer backdropPosterPath={state.backdrop_path} />
          <div className={styles.popular__movie_wrapper}>
-            <div>
+            <div className={styles.popular__movie_sidebar}>
                <MoviePoster posterPath={state.poster_path} />
-               <MovieInfo />
+               <MovieInfo movieInfo={state} />
             </div>
             <MovieMain movieInfo={state} />
          </div>

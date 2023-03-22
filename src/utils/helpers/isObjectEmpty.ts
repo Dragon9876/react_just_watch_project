@@ -1,3 +1,3 @@
 export const isObjectEmpty = (object: object) => {
-   return Objert(object).values().length === 0
+   return Object(object).values().length === 0
 }

@@ -2,9 +2,30 @@ import { FC } from 'react'
 
 import { Typography } from '../../../components'
 
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
+import { MOVIES_API_KEY } from '../../../config'
+import { IMovieDetailsResult, IMovieResult } from '../../../services/types/movies.in'
 import styles from './MovieInfo.module.scss'
 
-export const MovieInfo: FC = () => {
+interface IMovieInfo {
+   movieInfo: IMovieResult
+}
+
+export const MovieInfo: FC<IMovieInfo> = ({ movieInfo }) => {
+   const { data: movieDetails } = useQuery({
+      queryKey: ['movie_details', movieInfo.id],
+      enabled: !!movieInfo.id,
+      queryFn: ({ queryKey }): Promise<IMovieDetailsResult> => {
+         return axios
+            .get(`https://api.themoviedb.org/3/movie/${queryKey[1]}`, {
+               params: {
+                  api_key: MOVIES_API_KEY,
+               },
+            })
+            .then((response) => response.data)
+      },
+   })
    return (
       <div className={styles.movie__info}>
          <div className={styles.movie__info_item}>
@@ -15,10 +36,15 @@ export const MovieInfo: FC = () => {
                <img
                   src='https://www.justwatch.com/appassets/img/jw-icon.png'
                   alt='JustWatch Rating'
+                  style={{ width: '30px' }}
                />
-               <span>89%</span>
+               <span>{movieDetails?.imdb_id}%</span>
 
-               <img src='https://www.justwatch.com/appassets/img/imdb-logo.png' alt='IMDB' />
+               <img
+                  src='https://www.justwatch.com/appassets/img/imdb-logo.png'
+                  alt='IMDB'
+                  style={{ width: '30px' }}
+               />
                <span>8.0 (349k)</span>
             </Typography>
          </div>
@@ -27,7 +53,9 @@ export const MovieInfo: FC = () => {
                Genres
             </Typography>
             <Typography as='span' className={styles.movie__info_text}>
-               Science-Fiction, Action & Adventure, Comedy, Fantasy
+               {movieDetails?.genres.map((genre) => (
+                  <span key={genre.id}>{genre.name}, </span>
+               ))}
             </Typography>
          </div>
          <div className={styles.movie__info_item}>
@@ -35,7 +63,7 @@ export const MovieInfo: FC = () => {
                Runtime
             </Typography>
             <Typography as='span' className={styles.movie__info_text}>
-               2h 20min
+               {movieDetails?.runtime}
             </Typography>
          </div>
          <div className={styles.movie__info_item}>

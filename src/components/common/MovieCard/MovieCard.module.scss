@@ -1,0 +1,21 @@
+.movie {
+  display: flex;
+  height: 100%;
+  border-radius: 6px;
+  background-color: #10161d;
+  position: relative;
+
+  &__image {
+    border-radius: inherit;
+  }
+
+  &__icon {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    z-index: 100;
+    width: 20px;
+    color: #ffffff;
+    opacity: 0.3;
+  }
+}

@@ -33,6 +33,7 @@ export const AdditionalFilterItem: FC<IAdditionalFilterItem> = memo(
                   style={{
                      position: 'absolute',
                      top: '50px',
+                     zIndex: 1000,
                   }}
                   isExpended={additionalFilter.isExpanded}
                >
